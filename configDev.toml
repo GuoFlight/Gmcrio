@@ -1,0 +1,7 @@
+[log]
+level="DEBUG"    #INFO、WARN等
+path="./logs"
+rotationCount=3   #日志文件保存个数
+
+[http]
+port=8080
