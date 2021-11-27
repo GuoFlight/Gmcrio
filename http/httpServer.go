@@ -2,7 +2,6 @@ package http
 
 import (
 	"Gmicro/conf"
-	"Gmicro/http/httpCommon"
 	v1 "Gmicro/http/v1"
 	"Gmicro/logger"
 	"fmt"
@@ -12,7 +11,6 @@ import (
 func StartHttpServer(){
 	router := gin.New()
 	router.Use(gin.Recovery())
-	router.Use(httpCommon.LoggerMiddleware()) //使用日志中间件
 
 	//子路由v1
 	subRouterV1 := router.Group("/v1")
