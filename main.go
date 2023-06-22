@@ -1,23 +1,27 @@
 package main
 
 import (
+	"Gmicro/api"
 	"Gmicro/conf"
 	"Gmicro/flag"
-	"Gmicro/http"
 	"Gmicro/logger"
+	"Gmicro/timer"
 	"fmt"
 )
 
 func main() {
 	//解析命令行
-	flag.ParseConfig()
+	flag.InitFlag()
 
 	//解析配置文件
 	conf.ParseConfig(*flag.PathConfFile)
 
 	//初始化日志
 	logger.InitLog()
-	logger.Logger.Info("日志初始化完成")
+
+	// 初始化周期性任务
+	go timer.InitTimer()
+	<-timer.TimerInitDone
 
 	//功能导航
 	if *flag.Version {
@@ -26,9 +30,8 @@ func main() {
 	}
 
 	//启动http服务
-	go http.StartHttpServer()
+	go api.StartHttpServer()
 
 	//阻塞主进程
 	select {}
 }
-

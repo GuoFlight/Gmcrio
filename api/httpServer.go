@@ -1,14 +1,14 @@
-package http
+package api
 
 import (
+	v1 "Gmicro/api/v1"
 	"Gmicro/conf"
-	v1 "Gmicro/http/v1"
 	"Gmicro/logger"
 	"fmt"
 	"github.com/gin-gonic/gin"
 )
 
-func StartHttpServer(){
+func StartHttpServer() {
 	router := gin.New()
 	router.Use(gin.Recovery())
 
@@ -17,6 +17,6 @@ func StartHttpServer(){
 	subRouterV1.GET("/health", v1.Health)
 
 	//启动http服务
-	logger.Logger.Info("开始启动http服务")
-	router.Run(fmt.Sprintf(":%d",conf.GlobalConfig.Http.Port))
+	logger.GLogger.Info("开始启动http服务")
+	router.Run(fmt.Sprintf(":%d", conf.GConf.Http.Port))
 }

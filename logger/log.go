@@ -2,21 +2,22 @@ package logger
 
 import (
 	"Gmicro/conf"
-	"log"
 	"github.com/GuoFlight/glog"
 	"github.com/sirupsen/logrus"
+	"log"
 )
 
 var (
-	Logger *logrus.Logger
+	GLogger *logrus.Logger
 )
 
 func InitLog() {
-	path := conf.GlobalConfig.Log.Path
-	logLevel := conf.GlobalConfig.Log.Level
+	path := conf.GConf.Log.Path
+	logLevel := conf.GConf.Log.Level
 	var err error
-	Logger,err = glog.NewLogger(path,logLevel,false,10)
-	if err!=nil{
-		log.Fatal("日志初始化失败:",err)
+	GLogger, err = glog.NewLogger(path, logLevel, false, 10)
+	if err != nil {
+		log.Fatal("日志初始化失败:", err)
 	}
+	GLogger.Info("日志初始化完成")
 }
