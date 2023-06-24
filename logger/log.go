@@ -2,6 +2,7 @@ package logger
 
 import (
 	"Gmicro/conf"
+	"github.com/GuoFlight/gerror"
 	"github.com/GuoFlight/glog"
 	"github.com/sirupsen/logrus"
 	"log"
@@ -20,4 +21,26 @@ func InitLog() {
 		log.Fatal("日志初始化失败:", err)
 	}
 	GLogger.Info("日志初始化完成")
+}
+
+// PrintErr 输出错误日志
+func PrintErr(err *gerror.Gerr, elseInfo map[string]interface{}) *gerror.Gerr {
+	if elseInfo == nil {
+		elseInfo = make(map[string]interface{})
+	}
+	elseInfo["ErrFile"] = err.ErrFile
+	elseInfo["ErrLine"] = err.ErrLine
+	GLogger.WithFields(elseInfo).Error(err.Error())
+	return err
+}
+
+// PrintWarn 输出Warn日志
+func PrintWarn(err *gerror.Gerr, elseInfo map[string]interface{}) *gerror.Gerr {
+	if elseInfo == nil {
+		elseInfo = make(map[string]interface{})
+	}
+	elseInfo["ErrFile"] = err.ErrFile
+	elseInfo["ErrLine"] = err.ErrLine
+	GLogger.WithFields(elseInfo).Warn(err.Error())
+	return err
 }
