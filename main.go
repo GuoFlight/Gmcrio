@@ -10,28 +10,26 @@ import (
 )
 
 func main() {
-	//解析命令行
+	// 解析命令行
 	flag.InitFlag()
+	if *flag.Version {
+		fmt.Println(conf.Version)
+		return
+	}
 
-	//解析配置文件
+	// 解析配置文件
 	conf.ParseConfig(*flag.PathConfFile)
 
-	//初始化日志
+	// 初始化日志
 	logger.InitLog()
 
 	// 初始化周期性任务
 	go timer.InitTimer()
 	<-timer.TimerInitDone
 
-	//功能导航
-	if *flag.Version {
-		fmt.Println(conf.Version)
-		return
-	}
-
-	//启动http服务
+	// 启动http服务
 	go api.StartHttpServer()
 
-	//阻塞主进程
+	// 阻塞主进程
 	select {}
 }

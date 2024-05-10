@@ -1,5 +1,5 @@
 package conf
 
 var (
-	Version = "V1.5.0"
+	Version = "V0.0.0"
 )
