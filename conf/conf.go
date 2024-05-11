@@ -3,21 +3,16 @@ package conf
 import (
 	"github.com/BurntSushi/toml"
 	"log"
+	"os"
+	"path/filepath"
 )
 
 var (
-	GConf ConfigFileStruct
+	GConf ConfigFile
 )
 
-//解析配置文件
-func ParseConfig(pathConfFile string) {
-	if _, err := toml.DecodeFile(pathConfFile, &GConf); err != nil {
-		log.Fatal(err)
-	}
-}
-
-//配置文件结构体
-type ConfigFileStruct struct {
+// ConfigFile 配置文件结构体
+type ConfigFile struct {
 	Log struct {
 		Level         string `toml:"level"`
 		Path          string `toml:"path"`
@@ -29,4 +24,25 @@ type ConfigFileStruct struct {
 	Timer struct {
 		Interval int `toml:"interval"`
 	} `toml:"timer"`
+}
+
+// ParseConfig 解析配置文件
+func ParseConfig(pathConfFile string) {
+	if _, err := toml.DecodeFile(pathConfFile, &GConf); err != nil {
+		log.Fatal(err)
+	}
+	CheckAndInit()
+}
+func CheckAndInit() {
+	// 设置工作目录
+	path, err := os.Executable()
+	if err != nil {
+		log.Fatal(err)
+	}
+	wd := filepath.Dir(path)
+	log.Println("[INFO] work directory:", wd)
+	err = os.Chdir(wd)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
