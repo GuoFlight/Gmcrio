@@ -4,6 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Health(c *gin.Context){
-	c.JSON(200, "alive")
+func Health(c *gin.Context) {
+	c.String(200, "alive")
 }

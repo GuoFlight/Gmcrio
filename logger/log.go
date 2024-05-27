@@ -2,6 +2,7 @@ package logger
 
 import (
 	"Gmicro/conf"
+	"context"
 	"github.com/GuoFlight/gerror"
 	"github.com/GuoFlight/glog"
 	"github.com/sirupsen/logrus"
@@ -23,24 +24,34 @@ func InitLog() {
 	GLogger.Info("日志初始化完成")
 }
 
+// PrintInfo 输出info日志
+func PrintInfo(ctx context.Context, msg ...string) {
+	traceId, _ := ctx.Value("traceId").(string)
+	GLogger.WithFields(logrus.Fields{"traceId": traceId}).Info(msg)
+}
+
 // PrintErr 输出错误日志
-func PrintErr(err *gerror.Gerr, elseInfo map[string]interface{}) *gerror.Gerr {
-	if elseInfo == nil {
-		elseInfo = make(map[string]interface{})
+func PrintErr(gerr *gerror.Gerr, elseInfo ...map[string]interface{}) *gerror.Gerr {
+	kvInfo := make(map[string]interface{})
+	if len(elseInfo) > 1 {
+		kvInfo = elseInfo[0]
 	}
-	elseInfo["ErrFile"] = err.ErrFile
-	elseInfo["ErrLine"] = err.ErrLine
-	GLogger.WithFields(elseInfo).Error(err.Error())
-	return err
+	kvInfo["ErrFile"] = gerr.ErrFile
+	kvInfo["ErrLine"] = gerr.ErrLine
+	kvInfo["TraceId"] = gerr.TraceID
+	GLogger.WithFields(kvInfo).Error(gerr.Error())
+	return gerr
 }
 
 // PrintWarn 输出Warn日志
-func PrintWarn(err *gerror.Gerr, elseInfo map[string]interface{}) *gerror.Gerr {
-	if elseInfo == nil {
-		elseInfo = make(map[string]interface{})
+func PrintWarn(gerr *gerror.Gerr, elseInfo ...map[string]interface{}) *gerror.Gerr {
+	kvInfo := make(map[string]interface{})
+	if len(elseInfo) > 1 {
+		kvInfo = elseInfo[0]
 	}
-	elseInfo["ErrFile"] = err.ErrFile
-	elseInfo["ErrLine"] = err.ErrLine
-	GLogger.WithFields(elseInfo).Warn(err.Error())
-	return err
+	kvInfo["ErrFile"] = gerr.ErrFile
+	kvInfo["ErrLine"] = gerr.ErrLine
+	kvInfo["TraceId"] = gerr.TraceID
+	GLogger.WithFields(kvInfo).Warn(gerr.Error())
+	return gerr
 }

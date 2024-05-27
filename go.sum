@@ -1,7 +1,7 @@
 github.com/BurntSushi/toml v1.3.2 h1:o7IhLm0Msx3BaB+n3Ag7L8EVlByGnpq14C4YWiu/gL8=
 github.com/BurntSushi/toml v1.3.2/go.mod h1:CxXYINrC8qIiEnFrOxCa7Jy5BFHlXnUU2pbicEuybxQ=
-github.com/GuoFlight/gerror v1.0.0 h1:MK+O5Nt6f3EPurjlksuZ1CV44WViu1BAXXDnKT3wLP8=
-github.com/GuoFlight/gerror v1.0.0/go.mod h1:r7X0whiQmLCi67GjRny3+1s81JJSm2+1GVr6ZeIboAQ=
+github.com/GuoFlight/gerror v1.1.0 h1:T6Hpm/xheK3k2977LaV1q1Yg0X0MLTW5wY/3TlTbIcM=
+github.com/GuoFlight/gerror v1.1.0/go.mod h1:r7X0whiQmLCi67GjRny3+1s81JJSm2+1GVr6ZeIboAQ=
 github.com/GuoFlight/glog v1.3.0 h1:1Mul2fWNzboYtsbmCQ0pXeUR0RHhB3KSuuMuObM/XWg=
 github.com/GuoFlight/glog v1.3.0/go.mod h1:jI/Xdptof18VykCZJQV+vyI1LKEItKCUCf5+luE6WNM=
 github.com/bytedance/sonic v1.5.0/go.mod h1:ED5hyg4y6t3/9Ku1R6dU/4KyJ48DZ4jPhfY1O2AihPM=

@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/BurntSushi/toml v1.3.2
-	github.com/GuoFlight/gerror v1.0.0
+	github.com/GuoFlight/gerror v1.1.0
 	github.com/GuoFlight/glog v1.3.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/sirupsen/logrus v1.9.3

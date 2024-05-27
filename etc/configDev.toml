@@ -7,4 +7,4 @@ rotationCount=3   #日志文件保存个数
 port=8080
 
 [timer]
-interval=1       # 周期性任务的通用执行间隔，单位：s
+interval=10       # 周期性任务的通用执行间隔，单位：s

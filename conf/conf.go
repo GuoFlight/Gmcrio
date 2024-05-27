@@ -1,6 +1,7 @@
 package conf
 
 import (
+	"fmt"
 	"github.com/BurntSushi/toml"
 	"log"
 	"os"
@@ -40,7 +41,7 @@ func CheckAndInit() {
 		log.Fatal(err)
 	}
 	wd := filepath.Dir(path)
-	log.Println("[INFO] work directory:", wd)
+	fmt.Println("[INFO] work directory:", wd)
 	err = os.Chdir(wd)
 	if err != nil {
 		log.Fatal(err)

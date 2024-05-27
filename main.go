@@ -25,7 +25,7 @@ func main() {
 
 	// 初始化周期性任务
 	go timer.InitTimer()
-	<-timer.TimerInitDone
+	<-timer.InitDone
 
 	// 启动http服务
 	go api.StartHttpServer()
