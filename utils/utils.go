@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"Gmicro/conf"
 	"context"
 	uuid "github.com/satori/go.uuid"
 )
@@ -8,5 +9,5 @@ import (
 // GenCtxWithTraceId 生成带traceId的ctx
 func GenCtxWithTraceId(ctx context.Context) context.Context {
 	traceId := uuid.NewV4().String()
-	return context.WithValue(ctx, "traceId", traceId)
+	return context.WithValue(ctx, conf.TraceIdName, traceId)
 }

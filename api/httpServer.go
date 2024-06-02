@@ -15,6 +15,7 @@ func StartHttpServer() {
 	// 子路由v1
 	subRouterV1 := router.Group("/v1")
 	subRouterV1.GET("/health", v1.Health)
+	subRouterV1.GET("/test", v1.Test)
 
 	// 启动http服务
 	logger.GLogger.Info("开始启动http服务")

@@ -26,8 +26,8 @@ func InitLog() {
 
 // PrintInfo 输出info日志
 func PrintInfo(ctx context.Context, msg ...string) {
-	traceId, _ := ctx.Value("traceId").(string)
-	GLogger.WithFields(logrus.Fields{"traceId": traceId}).Info(msg)
+	traceId, _ := ctx.Value(conf.TraceIdName).(string)
+	GLogger.WithFields(logrus.Fields{conf.TraceIdName: traceId}).Info(msg)
 }
 
 // PrintErr 输出错误日志
@@ -38,7 +38,7 @@ func PrintErr(gerr *gerror.Gerr, elseInfo ...map[string]interface{}) *gerror.Ger
 	}
 	kvInfo["ErrFile"] = gerr.ErrFile
 	kvInfo["ErrLine"] = gerr.ErrLine
-	kvInfo["TraceId"] = gerr.TraceID
+	kvInfo[conf.TraceIdName] = gerr.TraceID
 	GLogger.WithFields(kvInfo).Error(gerr.Error())
 	return gerr
 }
@@ -51,7 +51,7 @@ func PrintWarn(gerr *gerror.Gerr, elseInfo ...map[string]interface{}) *gerror.Ge
 	}
 	kvInfo["ErrFile"] = gerr.ErrFile
 	kvInfo["ErrLine"] = gerr.ErrLine
-	kvInfo["TraceId"] = gerr.TraceID
+	kvInfo[conf.TraceIdName] = gerr.TraceID
 	GLogger.WithFields(kvInfo).Warn(gerr.Error())
 	return gerr
 }
