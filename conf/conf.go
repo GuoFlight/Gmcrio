@@ -25,6 +25,13 @@ type ConfigFile struct {
 	Timer struct {
 		Interval int `toml:"interval"`
 	} `toml:"timer"`
+	Auth struct {
+		SecondTokenExpire int `toml:"secondTokenExpire"`
+		Users             map[string]struct {
+			Password string `toml:"password"`
+			Role     Role   `toml:"role"`
+		} `toml:"users"`
+	} `toml:"auth"`
 }
 
 // ParseConfig 解析配置文件

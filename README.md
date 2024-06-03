@@ -27,6 +27,16 @@ go run main.go
 go run main.go -c ./configDev.toml
 ```
 
-<br>
+# API
 
-（未经许可请不要应用在任何商业用途上）
+## 鉴权
+
+```shell
+# 获取Token
+export umc_server="http://127.0.0.1:8080"
+token=$(curl -s -XPOST ${umc_server}/v1/login -d "{\"username\":\"admin\",\"password\":\"admin\"}" -H "Content-Type: application/json" | jq -r .data)
+# 访问需要鉴权的接口
+curl -H "Authorization: ${token}" ${umc_server}/xxx
+```
+
+<br>

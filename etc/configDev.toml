@@ -3,8 +3,14 @@ level="DEBUG"    #INFO、WARN等
 path="./logs"
 rotationCount=3   #日志文件保存个数
 
+[timer]
+interval=10       # 周期性任务的通用执行间隔，单位：s
+
 [http]
 port=8080
 
-[timer]
-interval=10       # 周期性任务的通用执行间隔，单位：s
+[auth]
+secondTokenExpire=3600
+[auth.users]
+admin={password="admin",role="admin"}
+user1={password="user1",role="viewer"}
