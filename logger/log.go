@@ -25,33 +25,29 @@ func InitLog() {
 }
 
 // PrintInfo 输出info日志
-func PrintInfo(ctx context.Context, msg ...string) {
+func PrintInfo(ctx context.Context, msg ...interface{}) {
 	traceId, _ := ctx.Value(conf.TraceIdName).(string)
 	GLogger.WithFields(logrus.Fields{conf.TraceIdName: traceId}).Info(msg)
 }
 
 // PrintErr 输出错误日志
-func PrintErr(gerr *gerror.Gerr, elseInfo ...map[string]interface{}) *gerror.Gerr {
-	kvInfo := make(map[string]interface{})
-	if len(elseInfo) > 1 {
-		kvInfo = elseInfo[0]
+func PrintErr(gerr *gerror.Gerr, elseInfo map[string]interface{}, msg ...interface{}) *gerror.Gerr {
+	if len(elseInfo) == 0 {
+		elseInfo = make(map[string]interface{})
 	}
-	kvInfo["ErrFile"] = gerr.ErrFile
-	kvInfo["ErrLine"] = gerr.ErrLine
-	kvInfo[conf.TraceIdName] = gerr.TraceID
-	GLogger.WithFields(kvInfo).Error(gerr.Error())
+	elseInfo["ErrFile"] = gerr.ErrFile
+	elseInfo["ErrLine"] = gerr.ErrLine
+	elseInfo[conf.TraceIdName] = gerr.TraceID
+	GLogger.WithFields(elseInfo).Error(gerr.Error(), msg)
 	return gerr
 }
 
 // PrintWarn 输出Warn日志
-func PrintWarn(gerr *gerror.Gerr, elseInfo ...map[string]interface{}) *gerror.Gerr {
-	kvInfo := make(map[string]interface{})
-	if len(elseInfo) > 1 {
-		kvInfo = elseInfo[0]
+func PrintWarn(ctx context.Context, elseInfo map[string]interface{}, msg ...interface{}) {
+	traceId, _ := ctx.Value(conf.TraceIdName).(string)
+	if len(elseInfo) == 0 {
+		elseInfo = make(map[string]interface{})
 	}
-	kvInfo["ErrFile"] = gerr.ErrFile
-	kvInfo["ErrLine"] = gerr.ErrLine
-	kvInfo[conf.TraceIdName] = gerr.TraceID
-	GLogger.WithFields(kvInfo).Warn(gerr.Error())
-	return gerr
+	elseInfo[conf.TraceIdName] = traceId
+	GLogger.WithFields(elseInfo).Warn(msg)
 }
