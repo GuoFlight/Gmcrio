@@ -8,17 +8,15 @@
 
 # 特点
 
-配置文件
-
-* 使用toml格式
-
-日志
-
-* 引入glog库：https://github.com/GuoFlight/glog
-
-http服务器
-
-* 采用Gin框架。
+* 参数解析：使用flag包
+* 配置文件：使用toml格式
+* 日志引入glog库：https://github.com/GuoFlight/glog
+* http服务器：采用Gin框架
+* 包版本管理：go mod
+* 接口鉴权
+* 优雅退出
+* 规范的TraceID
+* 规范的目录结构
 
 # 启动
 
