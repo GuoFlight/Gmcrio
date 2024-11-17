@@ -3,7 +3,7 @@ package logger
 import (
 	"Gmicro/conf"
 	"context"
-	"github.com/GuoFlight/gerror"
+	"github.com/GuoFlight/gerror/v2"
 	"github.com/GuoFlight/glog"
 	"github.com/sirupsen/logrus"
 	"log"
@@ -24,30 +24,51 @@ func InitLog() {
 	GLogger.Info("日志初始化完成")
 }
 
-// PrintInfo 输出info日志
-func PrintInfo(ctx context.Context, msg ...interface{}) {
-	traceId, _ := ctx.Value(conf.TraceIdName).(string)
-	GLogger.WithFields(logrus.Fields{conf.TraceIdName: traceId}).Info(msg)
+func getTraceId(ctx context.Context) string {
+	v, ok := ctx.Value(conf.KeyTraceId).(string)
+	if !ok {
+		return ""
+	}
+	return v
+}
+func WithFieldTraceIdFromCtx(ctx context.Context) *logrus.Entry {
+	traceId := getTraceId(ctx)
+	return GLogger.WithField(conf.KeyTraceId, traceId)
+}
+func WithFieldTraceIdFromGerr(gerr *gerror.Gerr) *logrus.Entry {
+	return GLogger.WithField(conf.KeyTraceId, gerr.TraceID)
 }
 
-// PrintErr 输出错误日志
-func PrintErr(gerr *gerror.Gerr, elseInfo map[string]interface{}, msg ...interface{}) *gerror.Gerr {
-	if len(elseInfo) == 0 {
-		elseInfo = make(map[string]interface{})
+func Info(ctx context.Context, arg ...any) {
+	WithFieldTraceIdFromCtx(ctx).Info(arg)
+}
+func ErrWithCtx(ctx context.Context, msg string) *gerror.Gerr {
+	return HandleGerr(gerror.SetSkip(2).SetTraceIdByCtx(ctx).NewErr(msg), nil)
+}
+
+func parseGerrExtInfo(gerr *gerror.Gerr, extInfo []map[string]interface{}) map[string]interface{} {
+	var info map[string]interface{}
+	if len(extInfo) > 0 && extInfo[0] != nil {
+		info = extInfo[0]
+	} else {
+		info = make(map[string]interface{})
 	}
-	elseInfo["ErrFile"] = gerr.ErrFile
-	elseInfo["ErrLine"] = gerr.ErrLine
-	elseInfo[conf.TraceIdName] = gerr.TraceID
-	GLogger.WithFields(elseInfo).Error(gerr.Error(), msg)
+	info["ErrFile"] = gerr.ErrFile
+	info["ErrLine"] = gerr.ErrLine
+	info["ErrFunc"] = gerr.ErrFunc
+	return info
+}
+
+// HandleGerr 输出错误日志
+func HandleGerr(gerr *gerror.Gerr, extInfo ...map[string]interface{}) *gerror.Gerr {
+	info := parseGerrExtInfo(gerr, extInfo)
+	WithFieldTraceIdFromGerr(gerr).WithFields(info).Error(gerr.Error())
 	return gerr
 }
 
-// PrintWarn 输出Warn日志
-func PrintWarn(ctx context.Context, elseInfo map[string]interface{}, msg ...interface{}) {
-	traceId, _ := ctx.Value(conf.TraceIdName).(string)
-	if len(elseInfo) == 0 {
-		elseInfo = make(map[string]interface{})
-	}
-	elseInfo[conf.TraceIdName] = traceId
-	GLogger.WithFields(elseInfo).Warn(msg)
+// HandleGerrWarn 输出Warn日志
+func HandleGerrWarn(gerr *gerror.Gerr, extInfo ...map[string]interface{}) *gerror.Gerr {
+	info := parseGerrExtInfo(gerr, extInfo)
+	WithFieldTraceIdFromGerr(gerr).WithFields(info).Warn(gerr.Error())
+	return gerr
 }

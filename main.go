@@ -3,9 +3,12 @@ package main
 import (
 	"Gmicro/api"
 	"Gmicro/conf"
+	"Gmicro/db"
 	"Gmicro/flag"
 	"Gmicro/logger"
+	"Gmicro/myctx"
 	"Gmicro/timer"
+	"context"
 	"fmt"
 	"os"
 	"os/signal"
@@ -26,6 +29,10 @@ func main() {
 	// 初始化日志
 	logger.InitLog()
 
+	// 初始化数据库
+	ctx := myctx.GenWithTraceId(context.Background())
+	db.Init(ctx)
+
 	// 初始化周期性任务
 	go timer.InitTimer()
 	<-timer.InitDone
@@ -45,10 +52,11 @@ func main() {
 				logger.GLogger.Info("app收到退出信号：", s)
 				<-timer.Done
 				<-api.Done
+				db.Exit()
 				logger.GLogger.Info("app正常退出")
 				done <- true
 			default:
-				fmt.Println("app收到即将忽略的信号:", s)
+				logger.GLogger.Warn("app收到即将忽略的信号:", s)
 			}
 		}
 	}()

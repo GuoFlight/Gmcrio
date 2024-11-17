@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"time"
 )
 
 var (
@@ -25,13 +26,16 @@ type ConfigFile struct {
 	Timer struct {
 		Interval int `toml:"interval"`
 	} `toml:"timer"`
-	Auth struct {
-		SecondTokenExpire int `toml:"secondTokenExpire"`
-		Users             map[string]struct {
-			Password string `toml:"password"`
-			Role     Role   `toml:"role"`
-		} `toml:"users"`
-	} `toml:"auth"`
+	Db struct {
+		Server          string        `toml:"server"`
+		MaxIdleConns    int           `toml:"maxIdleConns"`
+		MaxOpenConns    int           `toml:"maxOpenConns"`
+		ConnMaxLifetime time.Duration `toml:"connMaxLifetime"`
+	} `toml:"db"`
+	Jwt struct {
+		Secret string `toml:"secret"`
+		Expire int    `toml:"expire"`
+	} `toml:"jwt"`
 }
 
 // ParseConfig 解析配置文件

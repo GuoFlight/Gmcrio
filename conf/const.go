@@ -1,8 +1,9 @@
 package conf
 
-var (
+const (
 	Version     = "V0.0.0"
-	TraceIdName = "TraceId"
+	KeyTraceId  = "TraceId"
+	KeyUsername = "username"
 )
 
 type Role string
