@@ -42,8 +42,14 @@ func WithFieldTraceIdFromGerr(gerr *gerror.Gerr) *logrus.Entry {
 func Info(ctx context.Context, arg ...any) {
 	WithFieldTraceIdFromCtx(ctx).Info(arg)
 }
-func ErrWithCtx(ctx context.Context, msg string) *gerror.Gerr {
-	return HandleGerr(gerror.SetSkip(2).SetTraceIdByCtx(ctx).NewErr(msg), nil)
+func Trace(ctx context.Context, arg ...any) {
+	WithFieldTraceIdFromCtx(ctx).Trace(arg...)
+}
+func Warn(ctx context.Context, arg ...any) {
+	WithFieldTraceIdFromCtx(ctx).Warn(arg...)
+}
+func Debug(ctx context.Context, arg ...any) {
+	WithFieldTraceIdFromCtx(ctx).Debug(arg...)
 }
 
 func parseGerrExtInfo(gerr *gerror.Gerr, extInfo []map[string]interface{}) map[string]interface{} {
@@ -71,4 +77,8 @@ func HandleGerrWarn(gerr *gerror.Gerr, extInfo ...map[string]interface{}) *gerro
 	info := parseGerrExtInfo(gerr, extInfo)
 	WithFieldTraceIdFromGerr(gerr).WithFields(info).Warn(gerr.Error())
 	return gerr
+}
+
+func ErrWithCtx(ctx context.Context, msg string, extInfo ...map[string]interface{}) *gerror.Gerr {
+	return HandleGerr(gerror.SetSkip(2).SetTraceIdByCtx(ctx).NewErr(msg), extInfo...)
 }

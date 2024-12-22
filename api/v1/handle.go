@@ -2,18 +2,14 @@ package v1
 
 import (
 	"Gmicro/conf"
+	"Gmicro/models"
 	"Gmicro/utils"
 	"context"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
-type Res struct {
-	Code    int         `json:"code"`
-	Msg     string      `json:"msg"`
-	TraceId string      `json:"traceId,omitempty"`
-	Data    interface{} `json:"data,omitempty"`
-}
+type Res models.Res
 
 func Health(c *gin.Context) {
 	c.JSON(http.StatusOK, Res{
