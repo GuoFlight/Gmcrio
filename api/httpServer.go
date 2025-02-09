@@ -14,7 +14,7 @@ var Done = make(chan bool, 1)
 
 func StartHttpServer() {
 	router := gin.New()
-	router.Use(gin.Recovery())
+	router.Use(traceIdMiddleware(), logMiddleware(), gin.Recovery())
 
 	// 子路由api
 	rApi := router.Group("/api")
@@ -22,7 +22,6 @@ func StartHttpServer() {
 	// 子路由v1
 	rApiV1 := rApi.Group("/v1")
 	rApiV1.GET("/health", v1.Health)
-	rApiV1.GET("/test", v1.Test)
 
 	// 子路由/v1/jwt
 	rApiV1Jwt := rApiV1.Group("/jwt")
@@ -30,7 +29,7 @@ func StartHttpServer() {
 
 	rApiV1Admin := rApiV1.Group("/admin")
 	rApiV1Admin.Use(v1.GAuth.Auth())
-	rApiV1Admin.GET("/testAuth", v1.TestAuth) // 测试用
+	rApiV1Admin.GET("/testAuth", v1.TestAuth) // 测试
 
 	// 启动http服务
 	logger.GLogger.Info("开始启动http服务")

@@ -10,6 +10,7 @@ import (
 	"Gmicro/timer"
 	"context"
 	"fmt"
+	"log"
 	"os"
 	"os/signal"
 	"syscall"
@@ -27,17 +28,21 @@ func main() {
 	conf.ParseConfig(*flag.PathConfFile)
 
 	// 初始化日志
+	log.Println("正在初始化日志")
 	logger.InitLog()
 
 	// 初始化数据库
-	ctx := myctx.GenWithTraceId(context.Background())
+	log.Println("正在初始化数据库")
+	ctx := myctx.GenWithTraceId(context.Background(), myctx.GenTraceId())
 	db.Init(ctx)
 
 	// 初始化周期性任务
+	log.Println("正在初始化周期性任务")
 	go timer.InitTimer()
 	<-timer.InitDone
 
 	// 启动http服务
+	log.Println("正在初始化web服务")
 	go api.StartHttpServer()
 
 	// 优雅退出

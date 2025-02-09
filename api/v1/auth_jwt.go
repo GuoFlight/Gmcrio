@@ -28,7 +28,7 @@ type ReqLogin struct {
 }
 
 func (j Jwt) Auth(c *gin.Context) bool {
-	ctx := myctx.GenFromGin(c)
+	ctx := myctx.GCtx.Gin.GenCtx(c)
 	tokenStr, ok := j.GetTokenFromReq(c)
 	if !ok {
 		c.JSON(401, Res{
@@ -82,7 +82,7 @@ func (Jwt) ParseToken(ctx context.Context, tokenStr string) (*Jwt, *gerror.Gerr)
 
 // Login 用户登录，返回token
 func (j Jwt) Login(c *gin.Context) {
-	ctx := myctx.GenFromGin(c)
+	ctx := myctx.GCtx.Gin.GenCtx(c)
 	// 获取请求参数
 	var req ReqLogin
 	if err := c.ShouldBind(&req); err != nil {

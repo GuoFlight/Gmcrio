@@ -1,10 +1,9 @@
 package v1
 
 import (
-	"Gmicro/conf"
 	"Gmicro/models"
-	"Gmicro/utils"
-	"context"
+	"Gmicro/myctx"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -18,24 +17,13 @@ func Health(c *gin.Context) {
 	})
 }
 
-func Test(c *gin.Context) {
-	ctx := getCtxWithTraceId(c)
-	v, _ := ctx.Value(conf.KeyTraceId).(string)
-	c.String(http.StatusOK, v)
-}
 func TestAuth(c *gin.Context) {
+	ctx := myctx.GCtx.Gin.GenCtx(c)
+	opUser := myctx.GetOpUser(ctx)
+	traceId := myctx.GetTraceId(ctx)
 	c.JSON(http.StatusOK, Res{
 		Code: 0,
 		Msg:  "success.",
+		Data: fmt.Sprintf("用户名:%s traceId: %s", opUser, traceId),
 	})
-}
-
-// 生成带traceId的ctx
-func getCtxWithTraceId(c *gin.Context) context.Context {
-	traceId, ok := c.Request.Header[conf.KeyTraceId]
-	if ok {
-		return context.WithValue(context.Background(), conf.KeyTraceId, traceId[0])
-	} else {
-		return utils.GenCtxWithTraceId(context.Background())
-	}
 }

@@ -21,7 +21,7 @@ func InitTimer() {
 
 	// 启动周期性任务
 	DemoTimer()
-	go Exec(DemoTimer)
+	go Exec(DemoTimer, conf.GConf.Timer.IntervalSec)
 
 	// 周期性任务初始化完成
 	logger.GLogger.Info("周期性任务初始化完成")
@@ -53,11 +53,11 @@ func InitTimer() {
 	<-done
 }
 
-func Exec(task func()) {
+func Exec(task func(), intervalSec time.Duration) {
 	wg.Add(1)
 	defer wg.Done()
 
-	ticker := time.NewTicker(time.Duration(conf.GConf.Timer.Interval) * time.Second)
+	ticker := time.NewTicker(intervalSec * time.Second)
 	defer ticker.Stop()
 
 	flag := make(chan bool)
@@ -78,6 +78,6 @@ func Exec(task func()) {
 // DemoTimer 周期性任务的Demo
 func DemoTimer() {
 	logger.GLogger.Info("开始执行DemoTimer函数")
-	time.Sleep(10 * time.Second) // do something
+	// time.Sleep(10 * time.Second) // do something
 	logger.GLogger.Info("执行了DemoTimer函数")
 }

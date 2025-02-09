@@ -21,10 +21,12 @@ type ConfigFile struct {
 		RotationCount uint   `toml:"rotationCount"`
 	} `toml:"log"`
 	Http struct {
-		Port int `toml:"port"`
+		Port         int    `toml:"port"`
+		LogFilePath  string `toml:"logFilePath"`
+		LogFileCount uint   `toml:"logFileCount"`
 	} `toml:"http"`
 	Timer struct {
-		Interval int `toml:"interval"`
+		IntervalSec time.Duration `toml:"interval"`
 	} `toml:"timer"`
 	Db struct {
 		Server          string        `toml:"server"`
@@ -56,5 +58,9 @@ func CheckAndInit() {
 	err = os.Chdir(wd)
 	if err != nil {
 		log.Fatal(err)
+	}
+	// http配置
+	if GConf.Http.LogFilePath == "" {
+		GConf.Http.LogFilePath = defaultHttpLogFilePath
 	}
 }

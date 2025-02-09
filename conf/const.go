@@ -6,6 +6,10 @@ const (
 	KeyUsername = "username"
 )
 
+const (
+	defaultHttpLogFilePath = "./logs/access.log"
+)
+
 type Role string
 
 const (
